@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="EV Monitor"/>
-<meta name="theme-color" content="#325B73"/>
+<meta name="theme-color" content="#006361"/>
 <title>EV Range Monitor</title>
 <link rel="manifest" href="manifest.json"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -17,27 +17,27 @@
 <style>
 /* ── TOKENS ───────────────────────────────────────────── */
 :root {
-  --c1: #325B73;   /* ocean teal */
-  --c2: #323B73;   /* navy indigo */
-  --c3: #327B73;   /* sea green */
+  --c1: #006361;   /* teal header */
+  --c2: #004f4e;   /* dark teal */
+  --c3: #006361;   /* teal */
 
-  --bg:         #0a1520;
-  --bg2:        #0f1e2e;
-  --surface:    #13243a;
-  --surface2:   #162c45;
-  --border:     rgba(50,91,115,0.35);
-  --border2:    rgba(50,123,115,0.25);
+  --bg:         #d8cdb8;
+  --bg2:        #f1ead7;
+  --surface:    #f7f2e8;
+  --surface2:   #ede6d2;
+  --border:     rgba(0,99,97,0.35);
+  --border2:    rgba(0,99,97,0.20);
 
-  --text:       #e8f4f8;
-  --text2:      #8fb8cc;
-  --text3:      #5a8099;
+  --text:       #1a2a1a;
+  --text2:      #3a5a3a;
+  --text3:      #5a7a4a;
 
-  --accent1:    #42a0c8;   /* bright teal-blue */
-  --accent2:    #3dcfb8;   /* bright sea-green */
-  --accent3:    #6b7fd4;   /* soft indigo */
+  --accent1:    #743332;   /* button red-brown */
+  --accent2:    #005e5d;   /* deep teal */
+  --accent3:    #8b4a49;   /* light red-brown */
   --warn:       #f0a04b;
   --danger:     #e05a6a;
-  --ok:         #3dcfb8;
+  --ok:         #006361;
 
   --r-card:     16px;
   --r-pill:     999px;
@@ -68,16 +68,16 @@ body::before {
   content: '';
   position: fixed; inset: 0; z-index: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 15% 10%, rgba(50,91,115,0.18) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 85% 80%, rgba(50,123,115,0.14) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 70% at 50% 50%, rgba(50,59,115,0.10) 0%, transparent 60%);
+    radial-gradient(ellipse 80% 60% at 15% 10%, rgba(0,99,97,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 80%, rgba(116,51,50,0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 70% at 50% 50%, rgba(190,211,142,0.15) 0%, transparent 60%);
   pointer-events: none;
 }
 
 /* ── STATUS BAR SPACER ───────────────────────────────── */
 .status-bar {
   height: calc(var(--safe-top) + 12px);
-  background: linear-gradient(180deg, rgba(10,21,32,0.95) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(0,99,97,0.95) 0%, transparent 100%);
 }
 
 /* ── HEADER ──────────────────────────────────────────── */
@@ -89,14 +89,14 @@ header {
 .logo-area { display: flex; align-items: center; gap: 10px; }
 .logo-icon {
   width: 40px; height: 40px;
-  background: linear-gradient(135deg, var(--c1), var(--c3));
+  background: linear-gradient(135deg, #006361, #004f4e);
   border-radius: 12px;
   display: flex; align-items: center; justify-content: center;
   font-size: 20px;
-  box-shadow: 0 0 20px rgba(50,123,115,0.35);
+  box-shadow: 0 0 20px rgba(0,99,97,0.5);
 }
 .logo-text { font-family: var(--font-head); font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
-.logo-text span { color: var(--accent2); }
+.logo-text span { color: #006361; }
 .header-time {
   font-family: var(--font-mono); font-size: 12px; color: var(--text3);
   background: var(--surface); border: 1px solid var(--border);
@@ -107,7 +107,7 @@ header {
 #install-banner {
   display: none; z-index: 100;
   margin: 0 16px 12px;
-  background: linear-gradient(135deg, rgba(50,91,115,0.9), rgba(50,59,115,0.9));
+  background: linear-gradient(135deg, rgba(0,99,97,0.9), rgba(116,51,50,0.9));
   border: 1px solid var(--border);
   border-radius: var(--r-card);
   padding: 12px 16px;
@@ -118,7 +118,7 @@ header {
 #install-banner p { flex: 1; font-size: 13px; color: var(--text2); }
 #install-banner strong { color: var(--text); display: block; font-size: 14px; }
 .btn-install {
-  background: var(--accent2); color: #0a1520;
+  background: #743332; color: #fff;
   border: none; padding: 8px 16px; border-radius: var(--r-pill);
   font-family: var(--font-head); font-size: 13px; font-weight: 700;
   cursor: pointer; white-space: nowrap; flex-shrink: 0;
@@ -154,12 +154,12 @@ main { position: relative; z-index: 1; padding: 0 16px; }
   white-space: nowrap;
 }
 .car-chip.active {
-  background: linear-gradient(135deg, var(--c1), var(--c2));
-  border-color: var(--accent1);
+  background: linear-gradient(135deg, #006361, #004f4e);
+  border-color: #743332;
   color: #fff;
-  box-shadow: 0 0 16px rgba(50,91,115,0.5);
+  box-shadow: 0 0 16px rgba(0,99,97,0.5);
 }
-.car-chip:hover:not(.active) { border-color: var(--accent1); color: var(--text); }
+.car-chip:hover:not(.active) { border-color: #743332; color: var(--text); }
 
 /* ── BATTERY HERO CARD ───────────────────────────────── */
 .hero-card {
@@ -174,7 +174,7 @@ main { position: relative; z-index: 1; padding: 0 16px; }
   content: '';
   position: absolute; top: -40px; right: -40px;
   width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(50,123,115,0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0,99,97,0.20) 0%, transparent 70%);
   pointer-events: none;
 }
 .hero-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
@@ -187,10 +187,10 @@ main { position: relative; z-index: 1; padding: 0 16px; }
 }
 .spec-pill {
   font-family: var(--font-mono); font-size: 10px;
-  background: rgba(50,91,115,0.25); border: 1px solid var(--border);
+  background: rgba(0,99,97,0.20); border: 1px solid var(--border);
   padding: 3px 8px; border-radius: var(--r-pill); color: var(--text2);
 }
-.spec-pill.rating { background: rgba(50,59,115,0.3); border-color: rgba(107,127,212,0.4); color: var(--accent3); }
+.spec-pill.rating { background: rgba(116,51,50,0.2); border-color: rgba(116,51,50,0.4); color: #743332; }
 
 /* ── BATTERY VISUAL ──────────────────────────────────── */
 .battery-visual {
@@ -236,7 +236,7 @@ main { position: relative; z-index: 1; padding: 0 16px; }
 .km-big {
   font-family: var(--font-head); font-size: 52px; font-weight: 800;
   letter-spacing: -2px; line-height: 1;
-  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  background: linear-gradient(135deg, #006361, #743332);
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 .km-unit {
@@ -251,13 +251,13 @@ main { position: relative; z-index: 1; padding: 0 16px; }
 /* ── INPUT SECTION ───────────────────────────────────── */
 .input-row {
   display: flex; align-items: center; gap: 10px;
-  background: var(--surface2); border: 1.5px solid var(--accent1);
+  background: var(--surface2); border: 1.5px solid #743332;
   border-radius: 14px; padding: 10px 14px;
-  box-shadow: 0 0 20px rgba(66,160,200,0.15);
+  box-shadow: 0 0 20px rgba(116,51,50,0.20);
 }
 .input-row label {
   font-family: var(--font-head); font-size: 11px; font-weight: 600;
-  letter-spacing: 0.8px; color: var(--accent1); text-transform: uppercase;
+  letter-spacing: 0.8px; color: #743332; text-transform: uppercase;
   white-space: nowrap;
 }
 .input-row input[type=number] {
@@ -281,7 +281,7 @@ main { position: relative; z-index: 1; padding: 0 16px; }
 }
 .range-bar-fill {
   height: 100%; border-radius: 3px;
-  background: linear-gradient(90deg, var(--c1), var(--accent2));
+  background: linear-gradient(90deg, #006361, #743332);
   transition: width 0.6s ease;
 }
 .range-markers {
@@ -301,7 +301,7 @@ main { position: relative; z-index: 1; padding: 0 16px; }
 }
 .section-label::after {
   content: ''; flex: 1; height: 1px;
-  background: linear-gradient(90deg, var(--border), transparent);
+  background: linear-gradient(90deg, rgba(0,99,97,0.4), transparent);
 }
 
 .info-grid {
@@ -316,13 +316,13 @@ main { position: relative; z-index: 1; padding: 0 16px; }
 .info-card::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--c1), var(--c3));
+  background: linear-gradient(90deg, #006361, #004f4e);
   opacity: 0;
   transition: opacity 0.2s;
 }
 .info-card:active { transform: scale(0.97); }
 .info-card.wide { grid-column: 1 / -1; }
-.info-card.highlight { border-color: rgba(61,207,184,0.4); background: rgba(50,123,115,0.12); }
+.info-card.highlight { border-color: rgba(0,99,97,0.4); background: rgba(0,99,97,0.10); }
 .info-card.highlight::before { opacity: 1; }
 .info-card.warn-card { border-color: rgba(240,160,75,0.4); background: rgba(240,160,75,0.06); }
 
@@ -352,7 +352,7 @@ main { position: relative; z-index: 1; padding: 0 16px; }
   content: '';
   position: absolute; bottom: -30px; right: -30px;
   width: 120px; height: 120px;
-  background: radial-gradient(circle, rgba(50,91,115,0.2) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0,99,97,0.20) 0%, transparent 70%);
 }
 .timeline-row {
   display: flex; align-items: center; gap: 12px; position: relative; z-index: 1;
@@ -361,18 +361,18 @@ main { position: relative; z-index: 1; padding: 0 16px; }
 .tl-dot {
   width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
 }
-.tl-dot.start { background: var(--accent1); box-shadow: 0 0 8px var(--accent1); }
-.tl-dot.stop  { background: var(--accent2); box-shadow: 0 0 8px var(--accent2); }
+.tl-dot.start { background: #743332; box-shadow: 0 0 8px rgba(116,51,50,0.6); }
+.tl-dot.stop  { background: #006361; box-shadow: 0 0 8px rgba(0,99,97,0.6); }
 .tl-line {
   position: absolute; left: 4px; top: 20px; bottom: -6px;
-  width: 2px; background: linear-gradient(180deg, var(--accent1), var(--accent2));
+  width: 2px; background: linear-gradient(180deg, #743332, #006361);
 }
 .tl-label { font-size: 11px; color: var(--text3); }
 .tl-time  { font-family: var(--font-mono); font-size: 16px; font-weight: 500; color: var(--text); }
 .tl-dur {
   margin-left: auto; font-family: var(--font-mono); font-size: 13px;
-  color: var(--accent2);
-  background: rgba(61,207,184,0.1); border: 1px solid rgba(61,207,184,0.25);
+  color: #006361;
+  background: rgba(0,99,97,0.12); border: 1px solid rgba(0,99,97,0.30);
   padding: 4px 10px; border-radius: var(--r-pill);
 }
 
@@ -395,10 +395,10 @@ main { position: relative; z-index: 1; padding: 0 16px; }
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
   padding: 0 16px calc(var(--safe-bottom) + 8px);
-  background: linear-gradient(to top, var(--bg) 60%, transparent);
+  background: linear-gradient(to top, #d8cdb8 60%, transparent);
 }
 .nav-bar {
-  background: rgba(13,30,43,0.85); backdrop-filter: blur(20px);
+  background: rgba(0,99,97,0.88); backdrop-filter: blur(20px);
   border: 1px solid var(--border); border-radius: var(--r-pill);
   padding: 8px 12px;
   display: flex; justify-content: space-around;
@@ -411,9 +411,9 @@ main { position: relative; z-index: 1; padding: 0 16px; }
   color: var(--text3); min-width: 60px;
 }
 .nav-item.active {
-  background: linear-gradient(135deg, rgba(50,91,115,0.5), rgba(50,59,115,0.5));
-  color: var(--accent1);
-  border: 1px solid rgba(50,91,115,0.4);
+  background: linear-gradient(135deg, rgba(0,99,97,0.6), rgba(116,51,50,0.4));
+  color: #743332;
+  border: 1px solid rgba(0,99,97,0.5);
 }
 .nav-icon { font-size: 20px; line-height: 1; }
 .nav-label { font-family: var(--font-head); font-size: 10px; font-weight: 600; letter-spacing: 0.5px; }
@@ -449,7 +449,7 @@ main { position: relative; z-index: 1; padding: 0 16px; }
   font-family: var(--font-mono); font-size: 14px; color: var(--text);
   width: 80px; text-align: right; outline: none;
 }
-.setting-input:focus { border-color: var(--accent1); }
+.setting-input:focus { border-color: #743332; }
 
 /* toggle */
 .toggle { position: relative; width: 44px; height: 24px; }
@@ -465,7 +465,7 @@ main { position: relative; z-index: 1; padding: 0 16px; }
   background: var(--text3); border-radius: 50%;
   transition: 0.3s;
 }
-.toggle input:checked + .toggle-slider { background: var(--c1); border-color: var(--accent1); }
+.toggle input:checked + .toggle-slider { background: var(--c1); border-color: #743332; }
 .toggle input:checked + .toggle-slider::before { transform: translateX(20px); background: #fff; }
 
 /* ── COMPARE PAGE ────────────────────────────────────── */
@@ -481,21 +481,21 @@ main { position: relative; z-index: 1; padding: 0 16px; }
   display: flex; justify-content: space-between; margin-bottom: 8px;
 }
 .compare-car-name { font-family: var(--font-head); font-size: 13px; font-weight: 600; }
-.compare-val { font-family: var(--font-mono); font-size: 13px; color: var(--accent2); }
+.compare-val { font-family: var(--font-mono); font-size: 13px; color: #006361; }
 .compare-bar-track {
   height: 8px; background: rgba(255,255,255,0.06);
   border-radius: 4px; overflow: hidden;
 }
 .compare-bar-fill {
   height: 100%; border-radius: 4px;
-  background: linear-gradient(90deg, var(--c1), var(--accent2));
+  background: linear-gradient(90deg, #006361, #743332);
   transition: width 0.8s cubic-bezier(0.34,1.56,0.64,1);
 }
 
 /* ── TOAST ───────────────────────────────────────────── */
 .toast {
   position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
-  background: rgba(50,91,115,0.95); backdrop-filter: blur(12px);
+  background: rgba(0,99,97,0.95); backdrop-filter: blur(12px);
   border: 1px solid var(--border); border-radius: var(--r-pill);
   padding: 10px 20px; font-size: 13px; color: var(--text);
   z-index: 200; white-space: nowrap;
@@ -611,15 +611,15 @@ main { position: relative; z-index: 1; padding: 0 16px; }
   <div class="section-label">📍 Titik Jarak</div>
   <div class="range-detail-card">
     <div class="rd-row">
-      <div class="rd-label"><span class="dot" style="background:var(--ok)"></span> Target 80% Charge</div>
+      <div class="rd-label"><span class="dot" style="background:#006361"></span> Target 80% Charge</div>
       <div class="rd-val" id="rd-80">—</div>
     </div>
     <div class="rd-row">
-      <div class="rd-label"><span class="dot" style="background:var(--warn)"></span> Batas Minimum 20%</div>
+      <div class="rd-label"><span class="dot" style="background:#f0a04b"></span> Batas Minimum 20%</div>
       <div class="rd-val" id="rd-20">—</div>
     </div>
     <div class="rd-row">
-      <div class="rd-label"><span class="dot" style="background:var(--text3)"></span> Efisiensi</div>
+      <div class="rd-label"><span class="dot" style="background:#5a7a4a"></span> Efisiensi</div>
       <div class="rd-val" id="rd-eff">—</div>
     </div>
   </div>
@@ -692,7 +692,7 @@ main { position: relative; z-index: 1; padding: 0 16px; }
           <div class="setting-row-label">Data tersimpan lokal</div>
           <div class="setting-row-sub">Sisa km tiap mobil disimpan di perangkat</div>
         </div>
-        <button onclick="clearData()" style="background:rgba(224,90,106,0.15);border:1px solid rgba(224,90,106,0.3);color:var(--danger);padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer;font-family:var(--font-head)">Reset</button>
+        <button onclick="clearData()" style="background:rgba(116,51,50,0.15);border:1px solid rgba(116,51,50,0.3);color:#743332;padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer;font-family:var(--font-head)">Reset</button>
       </div>
     </div>
   </div>
@@ -779,9 +779,9 @@ function renderStrip() {
 
 // ── BATTERY COLOR ────────────────────────────────────────
 function batColor(pct) {
-  if(pct >= 0.6) return 'linear-gradient(90deg, #325B73, #3dcfb8)';
-  if(pct >= 0.3) return 'linear-gradient(90deg, #8b6914, #f0a04b)';
-  return 'linear-gradient(90deg, #7a1e2a, #e05a6a)';
+  if(pct >= 0.6) return 'linear-gradient(90deg, #006361, #005e5d)';
+  if(pct >= 0.3) return 'linear-gradient(90deg, #7a4a00, #f0a04b)';
+  return 'linear-gradient(90deg, #743332, #c04040)';
 }
 
 // ── MAIN RECALC ──────────────────────────────────────────
